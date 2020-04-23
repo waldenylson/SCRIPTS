@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sleep 6
+
+notify-send -i /home/operador/.config/tiop/icones/info.svg -t 90000 "Inicializando AMHS..." "Aguardando inicialização da máquina virtual"
+
+VBoxManage startvm "AMHS032018" && \
+sleep 23; notify-send -i /home/operador/.config/tiop/icones/checked.svg -t 100000 "Inicialização concluída!" "Acesse o AMHS pressionando Ctrl + Alt + 2 e retorne ao linux pressionando Ctrl + Alt + 1" || \
+notify-send -i /home/operador/.config/tiop/icones/cancel.svg -t 100000 "Falha ao inicializar AMHS" "Ocorreu uma falha ao inicializar o sistema virtual. Favor entrar em contato com a TIOp pelo ramal 8293 e reportar o ocorrido"
