@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AMHS.sh - Inicia a máquina virtual Windows do AMHS
+# TARIS.sh - Inicia a máquina virtual Ubuntu do TARIS
 #
 # Autor			: Diego Varejão <varejaodfav@fab.mil.br>
 # Manutenção	: Diego Varejão	<varejaodfav@fab.mil.br>
@@ -22,7 +22,7 @@
 #	* libnotify
 #
 # Utilização:
-#	$ ./AMHS.sh
+#	$ ./TARIS.sh
 #
 #-----------------------------------------------------------------------
 #
@@ -34,13 +34,13 @@
 #	- Corrigido a verificação de inicialização da máquina virtual
 #	- Acrescentado o log de inicialização da máquina virtual
 
-NOMEVM='AMHS2020'
+NOMEVM='TARIS2020'
 DATA=`date "+%m-%d-%Y %T"`
 
 sleep 15 
 
 notify-send -i /home/operador/.config/tiop/icones/info.svg -t 23000 \
-"Inicializando AMHS..." "Aguardando inicialização da máquina virtual"
+"Inicializando TARIS..." "Aguardando inicialização da máquina virtual"
 
 printf "\n$DATA Inicialização da máquina virtual\n" >> \
 /tiop/Logs/vmlog.txt
@@ -52,7 +52,7 @@ if [ "$?" -ne 0 ]; then
 
 	notify-send -i /home/operador/.config/tiop/icones/cancel.svg -t \
 	100000 \
-	"Falha ao inicializar AMHS" "Ocorreu uma falha ao inicializar o \
+	"Falha ao inicializar TARIS" "Ocorreu uma falha ao inicializar o \
 	sistema virtual. Favor entrar em contato com a TIOp pelo ramal \
 	8293 e reportar o ocorrido"
 
@@ -63,5 +63,5 @@ sleep 23
 
 notify-send -i /home/operador/.config/tiop/icones/checked.svg \
 	-t 100000 "Inicialização concluída!" \
-	"Acesse o AMHS pressionando Ctrl + Alt + 2 e retorne ao linux \
+	"Acesse o TARIS pressionando Ctrl + Alt + 3 e retorne ao linux \
 	pressionando Ctrl + Alt + 1"

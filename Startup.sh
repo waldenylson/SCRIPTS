@@ -37,10 +37,22 @@
 # v042020-0.2 23-04-2020, Waldenylson Silva
 #   - Segunda Versão
 
-AMHSVM='AMHS2020'
-TARISVM='TARIS2020'
+#AMHSVM='AMHS2020'
+#TARISVM='TARIS2020'
+TESTEVM='MikroTik-6.36'
 DATA=`date "+%m-%d-%Y %T"`
-ESTADOMV=`vboxmanage showvminfo "$NOMEVM" | grep -c "running (since"`
+
+# ESTADOS VM ----------->
+#						#
+# RUNNING => 1			#
+# STOPED  => 0			#
+#						#
+# ======================>
+
+#ESTADOAMHS=`vboxmanage showvminfo "$AMHSVM" | grep -c "running (since"`
+#ESTADOTARIS=`vboxmanage showvminfo "$TARISVM" | grep -c "running (since"`
+
+ESTADOTESTE=`vboxmanage showvminfo "$TESTEVM" | grep -c "running (since"`
 
 # Manipula as VMs =============================================================#
 # $1 - Operação a ser executada na VM                                          #
@@ -50,30 +62,56 @@ function ManipularVM()
 {
 	case "$1" in
 		start)
-			VBoxManage startvm $2 
+			notify-send -i /home/operador/.config/tiop/icones/exit.png -t \
+			30000 \
+			"Iniciando $2" "O sistema virtual do $2 está sendo iniciado, \
+			por favor aguarde..."
+
+			printf "$DATA Inicialização da máquina virtual $2 pelo script de \
+			manutenção\n" >> /tmp/testeLogScript.log #/tiop/Logs/vmlog.txt
+
+			VBoxManage startvm $2  >> /tmp/testeLogScript.log 2>&1 #/tiop/Logs/vmlog.txt 2>&1
 		;;
 		stop)
-			VBoxManage controlvm $2 acpipowerbutton
+			notify-send -i /home/operador/.config/tiop/icones/exit.png -t \
+			30000 \
+			"Desligando $2" "O sistema virtual do $2 está sendo desligado, \
+			por favor aguarde..."
+
+			printf "\n$DATA Desligamento da máquina virtual $2 pelo script de \
+			manutenção\n" >> /tmp/testeLogScript.log #/tiop/Logs/vmlog.txt
+				
+			VBoxManage controlvm $2 acpipowerbutton >> /tmp/testeLogScript.log 2>&1 #/tiop/Logs/vmlog.txt 
 		;;
 		restart)
-			ManipularVM stop $2 && ManipularVM start $2
+			notify-send -i /home/operador/.config/tiop/icones/exit.png -t \
+			30000 \
+			"Reiniciando $2" "O sistema virtual do $2 está sendo reiniciado, \
+			por favor aguarde..."
+
+			printf "\n$DATA Reinicialização da máquina virtual $2 pelo script de \
+			manutenção\n" >> /tmp/testeLogScript.log #/tiop/Logs/vmlog.tx
+
+			ManipularVM stop $2
+			sleep 10
+			ManipularVM start $2
 		;;
 	esac	
 }
 
-if [ $ESTADOMV -eq 1 ]; then
+echo $ESTADOTESTE
 
-	notify-send -i /home/operador/.config/tiop/icones/exit.png -t \
-	30000 \
-	"Desligando AMHS" "O sistema virtual do AMHS está sendo desligado, \
-	por favor aguarde até todo o sistema ser desativado."
+
+
+if [ $ESTADOMV -eq 1 ]; then # VM RUNNING
+
+	
 	
 	printf "\n$DATA Desligamento da máquina virtual pelo script de \
 	manutenção\n" >> /tiop/Logs/vmlog.txt
 	
 	# Desliga a máquina virtual do AMHS antes de executar qualquer ação
-	VBoxManage controlvm $NOMEVM acpipowerbutton >> \
-	/tiop/Logs/vmlog.txt 2>&1
+	ManipularVM stop $AMHSVM 
 	
 	
 	sleep 30
@@ -85,7 +123,7 @@ if [ $ESTADOMV -eq 1 ]; then
 		"Desligando TARIS" "O sistema virtual do TARIS está sendo desligado, \
 		por favor aguarde até todo o sistema ser desativado."
 		
-			printf "\n$DATA Desligamento da máquina virtual pelo script de \
+		printf "\n$DATA Desligamento da máquina virtual pelo script de \
 		manutenção\n" >> /tiop/Logs/vmlog.txt
 	
 		# Desliga a máquina virtual do TARIS antes de Desligar o Computador
