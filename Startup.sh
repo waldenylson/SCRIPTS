@@ -104,6 +104,8 @@ function ManipularVM()
 			printf "\n$DATA Desligamento da máquina virtual $2 pelo script de \
 			manutenção\n" >> /tmp/testeLogScript.log #/tiop/Logs/vmlog.txt
 				
+			sleep 10
+
 			VBoxManage controlvm $2 acpipowerbutton >> /tmp/testeLogScript.log 2>&1 #/tiop/Logs/vmlog.txt 
 		;;
 		restart)
@@ -116,10 +118,17 @@ function ManipularVM()
 			manutenção\n" >> /tmp/testeLogScript.log #/tiop/Logs/vmlog.tx
 
 			ManipularVM stop $2
-			sleep 15
+			sleep 30
 			ManipularVM start $2
 		;;
 	esac	
+}
+
+function ReiniciarHost()
+{
+	if [ $ESTADOTESTE -eq 1 ]; then # VM RUNNING
+		ManipularVM $1 $2 $3
+	fi
 }
 
 if [ $ESTADOTESTE -eq 1 ]; then # VM RUNNING
